@@ -135,7 +135,7 @@ enabled = true
 
 Add Predok as a connector: **Settings → Connectors → Add custom connector**,
 URL `https://api.predok.ai/mcp`. Step-by-step guide:
-[predok.ai/en/help](https://predok.ai/en/help).
+[predok.ai/en/help/connector](https://predok.ai/en/help/connector).
 
 ### Other harnesses
 
@@ -164,7 +164,7 @@ counted in credits, with a free allowance ([pricing](https://predok.ai/en/pricin
 - **Gemini CLI:** `/mcp auth predok`.
 - **Codex:** `codex mcp login predok`.
 - **OpenCode:** `/mcps` → `predok` or `opencode mcp auth predok`.
-- **Other harnesses:** [connection guide](https://predok.ai/en/help).
+- **Other harnesses:** [connection guide](https://predok.ai/en/help/agents).
 
 If you forget, the skill tells you what to do when the server asks you to sign in.
 

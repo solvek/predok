@@ -71,12 +71,16 @@ predok.ai, яку команда постійно оновлює. Читай а�
 браузері. Ніколи не проси в користувача пароль, токен чи код — лише проведи
 його кроками нижче.
 
+Коли MCP-сервер не підключено або він просить вхід, дай користувачу посилання на
+інструкцію `https://predok.ai/<мова>/help/agents.md` (`uk` або `en`; для інших мов —
+`en`). Її можна прочитати й агенту, щоб пояснити кроки точніше.
+
 Визнач стан і допоможи:
 
 | Що бачиш | Що сказати користувачу |
 |----------|------------------------|
 | Інструментів `predok` немає взагалі | Плагін не встановлено або не ввімкнено. Claude Code: `/plugin marketplace add solvek/predok`, `/plugin install predok-plugin@predok`, потім перезапустити Claude Code. |
-| Сервер є, але «needs authentication» / виклик повертає 401, «unauthorized», вимогу входу | Claude Code: виконати `/mcp`, обрати `predok` → **Authenticate**; у браузері увійти через Google і повернутися в термінал. Gemini CLI: `/mcp auth predok`. Codex: `codex mcp login predok`. OpenCode: `/mcps` → `predok` або `opencode mcp auth predok`. Інші середовища — [інструкція з підключення](https://predok.ai/uk/help) ([англ.](https://predok.ai/en/help)). |
+| Сервер є, але «needs authentication» / виклик повертає 401, «unauthorized», вимогу входу | Claude Code: виконати `/mcp`, обрати `predok` → **Authenticate**; у браузері увійти через Google і повернутися в термінал. Gemini CLI: `/mcp auth predok`. Codex: `codex mcp login predok`. OpenCode: `/mcps` → `predok` або `opencode mcp auth predok`. Інші середовища — [інструкція з підключення](https://predok.ai/uk/help/agents.md) ([англ.](https://predok.ai/en/help/agents.md)). |
 | Вхід був, але знову вимагає авторизації | Повторити вхід тими самими кроками (сесія могла завершитися). |
 | Помилка про вичерпані кредити | Пояснити й дати посилання на тарифи: [uk](https://predok.ai/uk/pricing) / [en](https://predok.ai/en/pricing). |
 | Сервер недоступний (мережа, 5xx) | Сказати про це й продовжити за методичкою, позначаючи, що базу Предка перевірити не вдалося. |

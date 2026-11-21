@@ -134,7 +134,7 @@ enabled = true
 
 Додай Предок як конектор: **Settings → Connectors → Add custom connector**,
 URL `https://api.predok.ai/mcp`. Покрокова інструкція —
-[predok.ai/uk/help](https://predok.ai/uk/help).
+[predok.ai/uk/help/connector](https://predok.ai/uk/help/connector).
 
 ### Інші харнеси
 
@@ -163,7 +163,7 @@ MCP-сервер використовує OAuth: вхід через облік�
 - **Gemini CLI:** `/mcp auth predok`.
 - **Codex:** `codex mcp login predok`.
 - **OpenCode:** `/mcps` → `predok` або `opencode mcp auth predok`.
-- **Інші середовища:** [інструкція з підключення](https://predok.ai/uk/help).
+- **Інші середовища:** [інструкція з підключення](https://predok.ai/uk/help/agents).
 
 Якщо забудеш — скіл сам підкаже, що робити, коли сервер попросить вхід.
 

@@ -136,7 +136,7 @@ enabled = true
 
 Dodaj Predok jako konektor: **Settings → Connectors → Add custom connector**,
 URL `https://api.predok.ai/mcp`. Instrukcja krok po kroku (po angielsku):
-[predok.ai/en/help](https://predok.ai/en/help).
+[predok.ai/en/help/connector](https://predok.ai/en/help/connector).
 
 ### Inne środowiska
 
@@ -165,7 +165,7 @@ kredytach, z darmowym limitem ([cennik](https://predok.ai/en/pricing)).
 - **Gemini CLI:** `/mcp auth predok`.
 - **Codex:** `codex mcp login predok`.
 - **OpenCode:** `/mcps` → `predok` lub `opencode mcp auth predok`.
-- **Inne środowiska:** [instrukcja podłączenia](https://predok.ai/en/help) (po angielsku).
+- **Inne środowiska:** [instrukcja podłączenia](https://predok.ai/en/help/agents) (po angielsku).
 
 Jeśli zapomnisz, skill sam podpowie, co zrobić, gdy serwer poprosi o logowanie.
 
