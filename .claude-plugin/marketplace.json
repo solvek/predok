@@ -1,0 +1,20 @@
+{
+  "name": "predok",
+  "owner": {
+    "name": "predok.ai",
+    "url": "https://predok.ai"
+  },
+  "metadata": {
+    "description": "Плагіни predok.ai для ШІ-агентів: дослідження родоводу в Україні."
+  },
+  "plugins": [
+    {
+      "name": "predok-plugin",
+      "source": "./",
+      "description": "Методичка пошуку предків в Україні (скіл predok-skill) і MCP-сервер predok.ai.",
+      "version": "0.1.0",
+      "category": "research",
+      "homepage": "https://predok.ai"
+    }
+  ]
+}
