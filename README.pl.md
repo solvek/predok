@@ -11,7 +11,7 @@ przodków żyjących na terenie dzisiejszej Ukrainy.
 | Komponent | Do czego służy |
 |-----------|----------------|
 | **Skill `predok-skill`** | Metodyka badań genealogicznych. Skill nie przechowuje tekstu metodyki — za każdym razem czyta aktualną wersję z bazy wiedzy predok.ai ([angielska](https://predok.ai/en/w/), [ukraińska](https://predok.ai/uk/w/)). Agent odpowiada po polsku. |
-| **Serwer MCP `predok`** | Serwer `https://api.predok.ai/mcp`, instalowany razem z pluginem, udostępnia agentowi narzędzia predok.ai. |
+| **Serwer MCP `predok`** | Serwer `https://api.predok.ai/mcp`, instalowany razem z pluginem, daje agentowi dostęp do bazy Predok: osoby, zdarzenia, miejscowości, nazwiska, źródła archiwalne z sygnaturami i skanami. Agent korzysta z niego w pierwszej kolejności. |
 
 ## Instalacja
 
@@ -23,8 +23,19 @@ przodków żyjących na terenie dzisiejszej Ukrainy.
 ```
 
 Po instalacji uruchom ponownie Claude Code. Skill i serwer MCP włączą się
-automatycznie. Jeśli serwer poprosi o autoryzację, wpisz `/mcp` i wybierz
-`predok`.
+automatycznie.
+
+### Logowanie do Predok
+
+Serwer MCP korzysta z OAuth: logujesz się kontem Google. Odczyt jest liczony w
+kredytach, z darmowym limitem ([cennik](https://predok.ai/en/pricing)).
+
+- **Claude Code:** `/mcp` → `predok` → **Authenticate**, zaloguj się w
+  przeglądarce i wróć do terminala.
+- **Gemini CLI:** `/mcp auth predok`.
+- **Inne środowiska:** [instrukcja podłączenia](https://predok.ai/en/help) (po angielsku).
+
+Jeśli zapomnisz, skill sam podpowie, co zrobić, gdy serwer poprosi o logowanie.
 
 ### Gemini CLI
 

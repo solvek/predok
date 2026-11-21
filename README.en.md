@@ -11,7 +11,7 @@ who lived in what is now Ukraine.
 | Component | What it does |
 |-----------|--------------|
 | **Skill `predok-skill`** | Genealogy research methodology. The skill does not store the methodology text; it always reads the current version from the predok.ai knowledge base ([English](https://predok.ai/en/w/), [Ukrainian](https://predok.ai/uk/w/)). |
-| **MCP server `predok`** | The `https://api.predok.ai/mcp` server, installed together with the plugin, gives the agent predok.ai tools. |
+| **MCP server `predok`** | The `https://api.predok.ai/mcp` server, installed together with the plugin, gives the agent access to the Predok database: people, events, places, surnames, archival sources with call numbers and scans. The agent queries it first. |
 
 ## Installation
 
@@ -23,8 +23,19 @@ who lived in what is now Ukraine.
 ```
 
 Restart Claude Code after installing. The skill and the MCP server are enabled
-automatically. If the server asks for authorization, run `/mcp` and select
-`predok`.
+automatically.
+
+### Signing in to Predok
+
+The MCP server uses OAuth: you sign in with a Google account. Reading is
+counted in credits, with a free allowance ([pricing](https://predok.ai/en/pricing)).
+
+- **Claude Code:** `/mcp` → `predok` → **Authenticate**, sign in in the browser
+  and return to the terminal.
+- **Gemini CLI:** `/mcp auth predok`.
+- **Other harnesses:** [connection guide](https://predok.ai/en/help).
+
+If you forget, the skill tells you what to do when the server asks you to sign in.
 
 ### Gemini CLI
 
