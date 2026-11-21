@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "predok-plugin",
+  "version": "0.2.0",
+  "description": "Дослідження родоводу з predok.ai: методичка пошуку предків в Україні та суміжних регіонах (скіл) і MCP-сервер бази Предка.",
+  "author": {
+    "name": "predok.ai",
+    "url": "https://predok.ai"
+  },
+  "homepage": "https://predok.ai",
+  "repository": "https://github.com/solvek/predok",
+  "license": "MIT",
+  "keywords": ["genealogy", "family-tree", "ukraine", "archives", "родовід", "генеалогія", "mcp"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Predok",
+        "shortDescription": "Пошук предків в Україні з базою й методичкою predok.ai",
+        "longDescription": "Скіл predok читає актуальну методичку пошуку предків з predok.ai, а MCP-сервер дає доступ до бази Предка: люди, події, місця, прізвища й архівні джерела з шифрами та сканами.",
+        "developerName": "predok.ai",
+        "category": "Productivity",
+        "websiteURL": "https://predok.ai",
+        "privacyPolicyURL": "https://predok.ai/en/privacy",
+        "termsOfServiceURL": "https://predok.ai/en/terms",
+        "defaultPrompt": [
+          "Мій прадід народився близько 1890 року в селі на Волині. З чого почати пошук?",
+          "Які джерела є в Предку для села Олеськ?"
+        ]
+      }
+    }
+  }
+}

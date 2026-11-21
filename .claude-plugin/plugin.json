@@ -1,6 +1,6 @@
 {
   "name": "predok-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Дослідження родоводу з predok.ai: методичка пошуку предків в Україні (скіл) і MCP-сервер predok.ai.",
   "author": {
     "name": "predok.ai",

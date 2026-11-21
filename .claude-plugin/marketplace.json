@@ -11,8 +11,8 @@
     {
       "name": "predok-plugin",
       "source": "./",
-      "description": "Методичка пошуку предків в Україні (скіл predok-skill) і MCP-сервер predok.ai.",
-      "version": "0.1.0",
+      "description": "Методичка пошуку предків в Україні (скіл predok) і MCP-сервер predok.ai.",
+      "version": "0.2.0",
       "category": "research",
       "homepage": "https://predok.ai"
     }
