@@ -168,6 +168,8 @@ counted in credits, with a free allowance ([pricing](https://predok.ai/en/pricin
 
 If you forget, the skill tells you what to do when the server asks you to sign in.
 
+After signing in, check that it works: ask the agent to find people with the surname "Коваль" (Koval) in Predok. If it returns records with ids and links to cards, the connection is fine. (An agent that installs the plugin by the [guide](https://predok.ai/help/agents.md) reminds you to sign in and offers this request itself.)
+
 ## Usage
 
 Tell the agent what you know about your ancestors and what you want to find,
@@ -193,6 +195,7 @@ plugin.json, mcp.json  Codex plugin manifest (Agent Plugins)
   marketplace.json   marketplace for codex plugin marketplace add
 skills/predok/SKILL.md  the skill (only instructions for reading the methodology from the site)
 docs/                internal documents
+scripts/build-skill-zip.sh  builds dist/predok-skill.zip with the skill for Claude.ai
 ```
 
 ## Contributing
