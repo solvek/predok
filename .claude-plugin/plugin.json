@@ -6,6 +6,7 @@
     "name": "predok.ai",
     "url": "https://predok.ai"
   },
+  "icon": "./assets/icon.png",
   "homepage": "https://predok.ai",
   "repository": "https://github.com/solvek/predok",
   "license": "MIT",
