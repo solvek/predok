@@ -168,7 +168,7 @@ counted in credits, with a free allowance ([pricing](https://predok.ai/en/pricin
 
 If you forget, the skill tells you what to do when the server asks you to sign in.
 
-After signing in, check that it works: ask the agent to find people with the surname "Коваль" (Koval) in Predok. If it returns records with ids and links to cards, the connection is fine. (An agent that installs the plugin by the [guide](https://predok.ai/help/agents.md) reminds you to sign in and offers this request itself.)
+After signing in, just tell the agent what you know about your ancestors: the first real request is the connection check. (An agent that installs the plugin by the [guide](https://predok.ai/help/agents.md) reminds you to sign in, makes no trial requests to the database and asks where to start the research.)
 
 ## Usage
 
