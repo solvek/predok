@@ -18,6 +18,8 @@
         "shortDescription": "Пошук предків в Україні з базою й методичкою predok.ai",
         "longDescription": "Скіл predok читає актуальну методичку пошуку предків з predok.ai, а MCP-сервер дає доступ до бази Предка: люди, події, місця, прізвища й архівні джерела з шифрами та сканами.",
         "developerName": "predok.ai",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png",
         "category": "Productivity",
         "websiteURL": "https://predok.ai",
         "privacyPolicyURL": "https://predok.ai/en/privacy",
