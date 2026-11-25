@@ -158,8 +158,9 @@ URL `https://api.predok.ai/mcp`. Покрокова інструкція —
 MCP-сервер використовує OAuth: вхід через обліковий запис Google. Читання
 рахується в кредитах, є безкоштовний ліміт ([тарифи](https://predok.ai/uk/pricing)).
 
-- **Claude Code:** `/mcp` → `predok` → **Authenticate**, увійти в браузері й
-  повернутися в термінал.
+- **Claude Code:** `/mcp` → `plugin:predok-plugin:predok` (або `predok`, якщо
+  сервер додано напряму) → **Authenticate**, увійти в браузері й повернутися в
+  термінал.
 - **Gemini CLI:** `/mcp auth predok`.
 - **Codex:** `codex mcp login predok`.
 - **OpenCode:** `/mcps` → `predok` або `opencode mcp auth predok`.

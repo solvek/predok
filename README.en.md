@@ -159,8 +159,9 @@ URL `https://api.predok.ai/mcp`. Step-by-step guide:
 The MCP server uses OAuth: you sign in with a Google account. Reading is
 counted in credits, with a free allowance ([pricing](https://predok.ai/en/pricing)).
 
-- **Claude Code:** `/mcp` → `predok` → **Authenticate**, sign in in the browser
-  and return to the terminal.
+- **Claude Code:** `/mcp` → `plugin:predok-plugin:predok` (or `predok` if you
+  added the server directly) → **Authenticate**, sign in in the browser and
+  return to the terminal.
 - **Gemini CLI:** `/mcp auth predok`.
 - **Codex:** `codex mcp login predok`.
 - **OpenCode:** `/mcps` → `predok` or `opencode mcp auth predok`.
