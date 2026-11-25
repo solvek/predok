@@ -43,6 +43,9 @@ claude plugin install predok-plugin@predok --scope local
 The marketplace itself (`marketplace add`) is only a catalog: it enables
 nothing until you install the plugin.
 
+The plugin's server is not picked up at once: run `/reload-plugins` (or restart
+Claude Code), otherwise `/mcp` will not show it.
+
 ### Gemini CLI
 
 ```bash

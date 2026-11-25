@@ -44,6 +44,9 @@ claude plugin install predok-plugin@predok --scope local
 Сам маркетплейс (`marketplace add`) — це лише каталог: він нічого не вмикає,
 доки плагін не встановлено.
 
+Сервер плагіна підхоплюється не одразу: виконай `/reload-plugins` (або
+перезапусти Claude Code), інакше `/mcp` його не покаже.
+
 ### Gemini CLI
 
 ```bash
