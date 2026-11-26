@@ -48,10 +48,24 @@ If pages cannot be fetched:
     tree, or an inference.
 
   Trees or sites that copied one another are one source, not several.
+- Whatever the level, mark these three states apart:
+  - **conflict** — the records say different things (another name of the
+    mother, another age);
+  - **ambiguity** — the records do not contradict, but two or more candidates
+    fit them (two namesakes of one age in one village). The common ancestors
+    of candidates who are relatives are not ambiguous: they are ancestors
+    under either version;
+  - **disproven** — a version tested and rejected; keep it with the reason.
+- One name is spelled differently across records (Theodorus, Teodor and Fedir;
+  Xenia and Oksana): reduce the forms to one name before calling it a conflict.
+  If an indexed name still disagrees with the family's other records, check
+  the scan.
 - A person in Predok is one mention in one source. Several records may be the
   same human: judge by names, dates, places and kin. Finding nothing in Predok
   does not prove that no document exists — go on to the online resources and
   archives the manual names.
+- Before reporting "not found", search every kind of record about the person
+  (marriage, death, confession list, gravestone), not only the birth.
 - Report empty searches too: what you looked for and where (Predok query,
   resource, parish, years).
 - Answer in the user's language. Keep the names of places, archives and fonds
