@@ -200,7 +200,12 @@ skills/predok/assets/AGENTS.md  шаблон інструкцій для тек�
 skills/predok/scripts/fan-chart/  скрипти віялової діаграми достовірності (Node: `render.mjs`, `from-glx.mjs`, `weigh.mjs`)
 docs/                службові документи
 scripts/build-skill-zip.sh  збирає dist/predok-skill.zip зі скілом для Claude.ai
+.github/workflows/   release.yml — реліз на тег версії; skill.yml — рухомий реліз `skill`
 ```
+
+Кожна зміна скіла в `main` оновлює реліз `skill`: архів
+`https://github.com/solvek/predok/releases/download/skill/predok-skill.zip` завжди
+відповідає `main`. Звідти його бере MCP-сервер predok.ai, тож тег версії для цього не потрібен.
 
 ## Внесок
 

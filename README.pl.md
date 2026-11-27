@@ -199,7 +199,13 @@ skills/predok/SKILL.md  skill (tylko instrukcja czytania metodyki ze strony)
 skills/predok/assets/AGENTS.md  szablon instrukcji dla folderu badacza (skill proponuje go w nowym projekcie)
 skills/predok/scripts/fan-chart/  skrypty wykresu wachlarzowego wiarygodności (Node: `render.mjs`, `from-glx.mjs`, `weigh.mjs`)
 docs/                dokumenty wewnętrzne
+scripts/build-skill-zip.sh  buduje dist/predok-skill.zip ze skillem dla Claude.ai
+.github/workflows/   release.yml — wydanie na tag wersji; skill.yml — ruchome wydanie `skill`
 ```
+
+Każda zmiana skilla w `main` aktualizuje wydanie `skill`: archiwum
+`https://github.com/solvek/predok/releases/download/skill/predok-skill.zip` zawsze
+odpowiada `main`. Serwer MCP predok.ai pobiera je stamtąd, więc tag wersji nie jest do tego potrzebny.
 
 ## Współpraca
 

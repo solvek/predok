@@ -202,7 +202,12 @@ skills/predok/assets/AGENTS.md  instructions template for a researcher's folder 
 skills/predok/scripts/fan-chart/  scripts of the confidence fan chart (Node: `render.mjs`, `from-glx.mjs`, `weigh.mjs`)
 docs/                internal documents
 scripts/build-skill-zip.sh  builds dist/predok-skill.zip with the skill for Claude.ai
+.github/workflows/   release.yml — release on a version tag; skill.yml — rolling release `skill`
 ```
+
+Every change of the skill on `main` updates the release `skill`: the archive
+`https://github.com/solvek/predok/releases/download/skill/predok-skill.zip` always
+matches `main`. The predok.ai MCP server takes it from there, so no version tag is needed for that.
 
 ## Contributing
 

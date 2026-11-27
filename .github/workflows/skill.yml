@@ -1,0 +1,49 @@
+# Keeps the rolling release `skill` in step with main: on every push to main that changes the skill,
+# the zip is rebuilt and the tag `skill` moves to that commit. The stable link
+# https://github.com/solvek/predok/releases/download/skill/predok-skill.zip always gives the skill
+# as it is on main; predok.ai serves it over MCP from there. Version releases (release.yml) stay
+# for people and keep the "latest" mark.
+name: Skill
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "scripts/build-skill-zip.sh"
+      - ".github/workflows/skill.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: skill-release
+  cancel-in-progress: false
+
+jobs:
+  skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the skill zip
+        run: ./scripts/build-skill-zip.sh
+
+      - name: Move the tag to this commit
+        run: |
+          git tag -f skill "$GITHUB_SHA"
+          git push -f origin refs/tags/skill
+
+      - name: Update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          notes="The skill as it is on main, commit ${GITHUB_SHA}. Rebuilt on every change of the skill."
+          if gh release view skill --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload skill dist/predok-skill.zip --repo "$GITHUB_REPOSITORY" --clobber
+            gh release edit skill --repo "$GITHUB_REPOSITORY" --notes "$notes" --latest=false
+          else
+            gh release create skill dist/predok-skill.zip --repo "$GITHUB_REPOSITORY" \
+              --title "Skill (main)" --notes "$notes" --latest=false
+          fi

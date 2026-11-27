@@ -1,6 +1,7 @@
 # Creates a GitHub release when a version tag (0.1, 0.2.1, …) is pushed, with the skill zip for
 # Claude.ai attached. The stable link https://github.com/solvek/predok/releases/latest/download/predok-skill.zip
-# always leads to the newest release.
+# always leads to the newest version release. The skill as it is on main is the rolling release
+# `skill` (skill.yml), which predok.ai serves over MCP.
 name: Release
 
 on:
