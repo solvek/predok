@@ -199,6 +199,7 @@ plugin.json, mcp.json  Codex plugin manifest (Agent Plugins)
   marketplace.json   marketplace for codex plugin marketplace add
 skills/predok/SKILL.md  the skill (only instructions for reading the methodology from the site)
 skills/predok/assets/AGENTS.md  instructions template for a researcher's folder (the skill offers it in a new project)
+skills/predok/scripts/fan-chart/  scripts of the confidence fan chart (Node: `render.mjs`, `from-glx.mjs`, `weigh.mjs`)
 docs/                internal documents
 scripts/build-skill-zip.sh  builds dist/predok-skill.zip with the skill for Claude.ai
 ```

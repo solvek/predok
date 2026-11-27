@@ -197,6 +197,7 @@ plugin.json, mcp.json  маніфест плагіна Codex (Agent Plugins)
   marketplace.json   маркетплейс для codex plugin marketplace add
 skills/predok/SKILL.md  скіл (лише інструкція, як читати методичку з сайту)
 skills/predok/assets/AGENTS.md  шаблон інструкцій для теки дослідника (скіл пропонує його в новому проєкті)
+skills/predok/scripts/fan-chart/  скрипти віялової діаграми достовірності (Node: `render.mjs`, `from-glx.mjs`, `weigh.mjs`)
 docs/                службові документи
 scripts/build-skill-zip.sh  збирає dist/predok-skill.zip зі скілом для Claude.ai
 ```

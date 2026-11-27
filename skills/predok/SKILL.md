@@ -74,6 +74,53 @@ If pages cannot be fetched:
   without the user's consent. Do not propose living people to Predok unless
   they appear in published sources.
 
+## Confidence fan chart
+
+A picture of the whole tree: where the weak branches are, which weak link
+lowers everything above it, where to search next. The rules (what a sector
+shows, how the weakest link and common ancestors are counted) are in the manual:
+`https://predok.ai/w/principles/proof-standard.md`, section "Confidence fan
+chart"; fetch it before the first chart.
+
+- **When to offer it.** Once the tree has three or more generations with
+  confidence levels set, and before the summary of a stage of work, offer the
+  user the chart. Keep one file (for example `reports/confidence-fan.html`)
+  and overwrite it each time; do not make dated copies: earlier states stay in
+  version history.
+- **Candidates are separate links.** When several candidates fit and no
+  document decides, write each as its own parent link with its own level, not
+  only as a note on the main one, so the chart can show both versions. Research
+  the ancestors of the alternative candidate at least one generation up: that is
+  where common ancestors and checkable differences are found. A candidate who is
+  a relative shares ancestors with the main one; they are not ambiguous.
+- **Probability.** If versions are weighed, show the probability with its range
+  next to the candidate and rebuild the chart after every recalculation. Never
+  show a percentage without the range. It does not raise the level: that comes
+  from sources alone.
+- **Chart that reads what the agent knows.** The chart needs only a list of
+  parent links with level and state; it does not need GLX. Build the data from
+  whatever the folder holds (GLX, GEDCOM, a table, Markdown notes).
+
+Scripts, in `scripts/fan-chart/` next to this file (Node 20 or newer, no install
+for the first one):
+
+| Script | What it does |
+|--------|--------------|
+| `render.mjs <data.json> [out.html] [--lang uk\|en] [--show 5] [--title …]` | Page from chart data; no dependencies. The format of `data.json` is in the header of the script. Use it for any source. |
+| `from-glx.mjs <tree_dir> --root <person-id> [--depth 10] [--hypotheses <dir>] [--lang uk\|en] [--out data.json]` | Chart data from a GLX archive. Needs the `yaml` package: run `npm install yaml` in the research folder. The conventions it reads (`-alt` relationships, `father` / `mother` in assertion ids, hypothesis files) are in the header of the script and in `https://predok.ai/w/tools/glx.md`. |
+| `weigh.mjs <hypotheses/name.yaml> [--lang uk\|en]` | Weighing of two hypotheses: ACH table, odds, range; writes `name.report.md`. Needs `yaml`. |
+
+Typical run, from the research folder (the scripts are in the plugin folder;
+find it with the path of this file):
+
+```
+node <skill>/scripts/fan-chart/from-glx.mjs tree --root person-x --out /tmp/fan.json
+node <skill>/scripts/fan-chart/render.mjs /tmp/fan.json reports/confidence-fan.html --lang en
+```
+
+The page is a single HTML file: tell the user where it is and how to open it.
+Use the user's language for `--lang` (`uk` or `en`; `en` otherwise).
+
 ## Local research folder
 
 When you can write files in the user's folder and research starts there, check
