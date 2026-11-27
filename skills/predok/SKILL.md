@@ -74,6 +74,24 @@ If pages cannot be fetched:
   without the user's consent. Do not propose living people to Predok unless
   they appear in published sources.
 
+## Local research folder
+
+When you can write files in the user's folder and research starts there, check
+for agent instructions (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`). If there are
+none, offer once to create `AGENTS.md` from the template `assets/AGENTS.md`
+next to this file (if it is missing, fetch
+`https://raw.githubusercontent.com/solvek/predok/main/skills/predok/assets/AGENTS.md`).
+It holds the research scope, working rules and how to report Predok errors.
+
+- The template is Ukrainian. If the user writes in another language, translate
+  the whole file; keep the folder and file names as they are.
+- Fill in "Про дослідження" from what the user has already told you; leave the
+  rest for later.
+- If your harness reads another file name, make that file a one-line pointer
+  to `AGENTS.md`.
+- Never overwrite existing instructions; offer to add the missing sections
+  instead. If the user declines, do not ask again.
+
 ## MCP server
 
 `https://api.predok.ai/mcp` (Streamable HTTP), OAuth sign-in with a Google

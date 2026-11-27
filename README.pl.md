@@ -196,6 +196,7 @@ plugin.json, mcp.json  manifest pluginu Codex (Agent Plugins)
 .agents/plugins/
   marketplace.json   marketplace dla codex plugin marketplace add
 skills/predok/SKILL.md  skill (tylko instrukcja czytania metodyki ze strony)
+skills/predok/assets/AGENTS.md  szablon instrukcji dla folderu badacza (skill proponuje go w nowym projekcie)
 docs/                dokumenty wewnętrzne
 ```
 
