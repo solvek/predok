@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Confidence fan chart</title>
 <style>
-:root{--bg:#fcfcfb;--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--border:rgba(11,11,11,.12);--chip:#f0efec;--accent:#1c5cab}
-@media (prefers-color-scheme:dark){:root{--bg:#151515;--surface:#1f1f1e;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--border:rgba(255,255,255,.14);--chip:#2c2c2a;--accent:#86b6ef}}
+:root{--bg:#fcfcfb;--surface:#ffffff;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--border:rgba(11,11,11,.12);--chip:#f0efec;--accent:#0f6fae}
+@media (prefers-color-scheme:dark){:root{--bg:#151515;--surface:#1f1f1e;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--border:rgba(255,255,255,.14);--chip:#2c2c2a;--accent:#62b6ea}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 main{max-width:760px;margin:0 auto;padding:20px 16px 32px}
@@ -21,7 +21,9 @@ button.on{background:var(--chip);border-color:var(--accent);color:var(--accent)}
 .kp span{font-size:12px;color:var(--ink2)}
 .leg{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin:0 0 6px}
 .leg span{display:flex;align-items:center;gap:5px}
-#wrap{position:relative}
+#wrap{position:relative;overflow-x:auto}
+#wrap svg{display:block}
+.seg{display:flex}.seg button:first-child{border-radius:8px 0 0 8px}.seg button:last-child{border-radius:0 8px 8px 0;margin-left:-1px}
 #tip{position:absolute;display:none;max-width:300px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.5;pointer-events:none;z-index:2;color:var(--ink)}
 .w{cursor:pointer}.w:hover path{opacity:.85}
 .forks{display:flex;flex-direction:column;gap:6px;margin:0 0 10px}
@@ -40,6 +42,7 @@ button.on{background:var(--chip);border-color:var(--accent);color:var(--accent)}
 <p class="sub" id="sub"></p>
 <div class="nav" id="nav"></div>
 <div class="bar">
+<div class="seg" role="group" id="views"><button class="on" id="vFan" onclick="setView('fan')"></button><button id="vSq" onclick="setView('sq')"></button></div>
 <button class="on" id="bChain" onclick="setMode('chain')"></button>
 <button id="bLink" onclick="setMode('link')"></button>
 <div class="kpis" id="kpis"></div>
@@ -48,47 +51,48 @@ button.on{background:var(--chip);border-color:var(--accent);color:var(--accent)}
 <div class="leg" id="leg"></div>
 <div id="wrap">
 <svg width="100%" viewBox="0 0 680 600" role="img" id="svg">
-<defs>
-<pattern id="hD" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#0d366b" stroke-width="1.5" opacity=".45"/></pattern>
-<pattern id="hL" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#ffffff" stroke-width="1.5" opacity=".5"/></pattern>
-<pattern id="dD" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.3" fill="#0d366b" opacity=".5"/></pattern>
-<pattern id="dL" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3.5" r="1.3" fill="#ffffff" opacity=".6"/></pattern>
-</defs>
-<g id="fan"></g></svg>
+<g id="fan"></g><g id="sq"></g></svg>
 <div id="tip"></div>
 </div>
 <p class="foot" id="foot"></p>
 </main>
 <script>
 const BASE=__DATA__,FORKS=__FORKS__.sort((a,b)=>a.n-b.n),SHOW=__SHOW__,DATE='__DATE__',T=__I18N__,TITLE=__TITLE__;
-const sel={};let D=[],V=[],by={},live=[],root=1,mode='chain';
+const sel={};let D=[],V=[],by={},live=[],root=1,mode='chain',view='fan';
 function gen(n){return Math.floor(Math.log2(n))}
 function above(k,n){if(k<=n)return false;while(k>n)k=Math.floor(k/2);return k===n}
 function inView(n){return n===root||above(n,root)}
 function build(){D=BASE.slice();const all=[];const idx=()=>{by={};D.forEach(p=>by[p.n]=p)};idx();
-FORKS.forEach(f=>{if(!by[f.n]||by[f.n].name!==f.who)return;all.push(f);const i=sel[f.n]||0;if(i){D=D.filter(p=>!above(p.n,f.n)).concat(f.alts[i-1]);idx()}});
+FORKS.forEach(f=>{if(!by[f.n]||by[f.n].name!==f.who)return;all.push(f);const i=sel[f.n]||0;if(i){const o=f.own?f.own[i]:null;D=D.filter(p=>!above(p.n,f.n)).map(p=>p.n===f.n&&o?{...p,...o}:p).concat(f.alts[i-1]);idx()}});
 if(!by[root])root=1;const g0=gen(root);
 V=D.filter(p=>inView(p.n)).map(p=>{const g=gen(p.n)-g0,w=2**g;return{p,g,m:p.n-root*w+w}}).filter(v=>v.g<=SHOW).sort((a,b)=>a.m-b.m);
 live=all.filter(f=>inView(f.n)&&gen(f.n)-g0<SHOW)}
 function forkAt(n){return live.find(f=>f.n===n)}
 function pc(x){return Math.round(x*100)+'%'}
+function mainB(f){const p=BASE.find(x=>x.n===f.n);return p&&p.b}
+function ownB(f,i){const o=f.own&&f.own[i];if(!o)return'';return yr(o.b||(i===0?mainB(f):''))}
 function prob(f){return f&&f.probs?f.probs[sel[f.n]||0]:null}
 function pick(n,i){sel[n]=i;hide();render()}
 function cycle(n){const f=forkAt(n);if(f)pick(n,((sel[n]||0)+1)%f.labels.length)}
-function go(n){root=n;hide();render();try{history.replaceState(null,'',n>1?'#n='+n:location.pathname+location.search)}catch(e){}}
-function forks(){document.getElementById('forks').innerHTML=live.map(f=>`<div class="fork"><span>${esc(T.forkOf(f.who))}</span>${f.labels.map((l,i)=>`<button class="${(sel[f.n]||0)===i?'on':''}" onclick="pick(${f.n},${i})">${esc(l)}${f.probs&&f.probs[i]?' · '+pc(f.probs[i].p):''}</button>`).join('')}</div>`).join('')}
+function hashSave(){const q=[];if(root>1)q.push('n='+root);if(view!=='fan')q.push('v='+view);history.replaceState(null,'',q.length?'#'+q.join('&'):location.pathname+location.search)}
+function go(n){root=n;hide();render();try{hashSave()}catch(e){}}
+function forks(){document.getElementById('forks').innerHTML=live.map(f=>`<div class="fork"><span>${esc(T.forkOf(f.who))}</span>${f.labels.map((l,i)=>{const b=ownB(f,i);return`<button class="${(sel[f.n]||0)===i?'on':''}" onclick="pick(${f.n},${i})">${b?esc(T.born)+' '+b+' · ':''}${esc(l)}${f.probs&&f.probs[i]?' · '+pc(f.probs[i].p):''}</button>`}).join('')}</div>`).join('')}
 function head(){const r=by[root],G=Math.max(...V.map(v=>v.g)),f=by[root*2],m=by[root*2+1];
 document.getElementById('ttl').textContent=(TITLE||T.title)+': '+r.name;
-document.getElementById('sub').textContent=T.sub(DATE,r.name,G?T.gen.slice(1,G+1).join(', '):'',f?f.name:'',m?m.name:'');
+document.getElementById('sub').textContent=(view==='sq'?T.subSq:T.sub)(DATE,r.name,G?T.gen.slice(1,G+1).join(', '):'',f?f.name:'',m?m.name:'');
 const path=[];for(let k=root;k>=1;k=Math.floor(k/2))path.unshift(k);
 document.getElementById('nav').innerHTML=root===1?`<span>${esc(T.navHint)}</span>`:`<button onclick="go(1)" title="${esc(T.home)}">⌂ ${esc(by[1].name)}</button>`+path.slice(1).map(k=>'<span>›</span>'+(k===root?`<span style="color:var(--ink)">${esc(by[k].name)}</span>`:`<button class="crumb" onclick="go(${k})">${esc(by[k].name)}</button>`)).join('')}
 const LV=T.levels;
 const ST=T.states;
 const dark=matchMedia('(prefers-color-scheme: dark)').matches;
-const PAL=dark?{3:['#b7d3f6','#0d366b','D'],2:['#3987e5','#0b0b0b','D'],1:['#184f95','#cde2fb','L'],0:['#383835','#f0efec','L']}:{3:['#184f95','#ffffff','L'],2:['#5598e7','#0d366b','D'],1:['#b7d3f6','#0d366b','D'],0:['#d3d1c7','#2c2c2a','D']};
+// Palette of predok.ai: confirmed deep green, probable teal, conjecture pale blue; lightness is monotonic, so the
+// order reads without colour. A conflict and an ambiguity have their own warm colours, which replace the level colour.
+const PAL=dark?{3:['#9bd36a','#10281a'],2:['#3f9c7e','#04140e'],1:['#1e5a86','#d6ecfa'],0:['#383835','#f0efec'],disputed:['#b4601f','#fff3e6'],ambiguous:['#8c7326','#fff6dc']}:{3:['#3a7d2c','#ffffff'],2:['#62b894','#0b2a1f'],1:['#bcdcf2','#06263d'],0:['#d3d1c7','#2c2c2a'],disputed:['#e8893a','#2a1300'],ambiguous:['#f1d28a','#33250a']};
+function colr(v){return v.s?PAL[v.s]:PAL[v.c]}
 const R=[[0,44],[46,84],[86,134],[136,194],[196,258],[260,338]];
 const CX=340,CY=346,START=-135,SPAN=270;
-function chain(n){let c=3,s='',w=null;const path=[];for(let k=n;k>root;k=Math.floor(k/2))path.unshift(k);const skip=(by[n]&&by[n].skip)||0;for(const k of path){const p=by[k];if(!p||k===skip)continue;if(p.l<c){c=p.l;s=p.s||'';w=k}else if(p.l===c&&p.s&&!s){s=p.s;if(w===null)w=k}}return{c,s,w}}
+// `fk` marks doubt about who a person is: ancestors common to all her candidates (`skip`) do not inherit it.
+function chain(n){let c=3,s='',w=null;const path=[];for(let k=n;k>root;k=Math.floor(k/2))path.unshift(k);const skip=(by[n]&&by[n].skip)||0;for(const k of path){const p=by[k];if(!p||k===skip)continue;const ps=skip&&p.fk?'':p.s;if(p.l<c){c=p.l;s=ps||'';w=k}else if(p.l===c&&ps&&!s){s=ps;if(w===null)w=k}}return{c,s,w}}
 function lvl(p){if(p.n===root)return null;if(mode==='link')return{c:p.l,s:p.s||''};const x=chain(p.n);return{c:x.c,s:x.s}}
 const NS='http://www.w3.org/2000/svg';
 function el(t,a,par){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);par.appendChild(e);return e}
@@ -99,24 +103,41 @@ function yr(s){if(!s)return'';const m=String(s).match(/\d{4}/);return m?(/^\d/.t
 function years(p){const b=yr(p.b),d=yr(p.d);return b||d?(b||'?')+'–'+d:''}
 function dmy(s){s=String(s);if(/^\d/.test(s))return s.split('-').reverse().join('.');const y=s.match(/\d{4}/g)||[];return T.about+' '+y.join('/')}
 function label(par,x,y,rot,lines,size,ink,w,sub){const g=el('g',{transform:`translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${rot.toFixed(1)})`},par);const h=size+2,n=lines.length+(sub?1:0),o=-(n-1)*h/2;lines.forEach((s,i)=>{const t=el('text',{x:0,y:o+i*h,'text-anchor':'middle','dominant-baseline':'central',style:`fill:${ink};font-size:${size}px;font-weight:${w}`},g);t.textContent=s});if(sub){const t=el('text',{x:0,y:o+lines.length*h,'text-anchor':'middle','dominant-baseline':'central',style:`fill:${ink};font-size:${size-2}px;font-weight:400;opacity:.8;font-variant-numeric:tabular-nums`},g);t.textContent=sub}}
-function render(){build();const g=document.getElementById('fan');g.innerHTML='';
+function render(){build();document.getElementById('fan').innerHTML='';document.getElementById('sq').innerHTML='';
+if(view==='sq')renderSq();else renderFan();
+head();kpis();legend();forks()}
+function hook(c,p){c.addEventListener('mousemove',e=>show(e,p));c.addEventListener('mouseleave',hide);c.addEventListener('click',()=>{if(p.n!==root)go(p.n);else if(root>1)go(Math.floor(root/2))})}
+function badge(par,f,x,y){const b=el('g',{class:'sw',role:'button','aria-label':T.switchLabel},par);el('title',{},b).textContent=T.switchTitle(f.who);
+el('circle',{cx:x,cy:y,r:10},b);const t=el('text',{x,y,'text-anchor':'middle','dominant-baseline':'central'},b);t.textContent='⇄';b.addEventListener('click',e=>{e.stopPropagation();cycle(f.n)})}
+function svgBox(w,h,aria){const v=document.getElementById('svg');v.setAttribute('viewBox',`0 0 ${w} ${h}`);v.setAttribute('aria-label',aria);v.style.minWidth=view==='sq'?'640px':''}
+function renderFan(){const g=document.getElementById('fan');svgBox(680,600,T.aria);
 const top=Math.max(...V.map(v=>v.g)),k=Math.min(1.7,R[SHOW][1]/R[top][1]);g.setAttribute('transform',`translate(${CX},${CY}) scale(${k.toFixed(3)}) translate(${-CX},${-CY})`);
-V.forEach(({p,g:gn,m})=>{const v=lvl(p);const fill=v?PAL[v.c][0]:'var(--chip)',ink=v?PAL[v.c][1]:'var(--ink)';
-const c=el('g',{class:'w'},g);const parts=p.name.split(' ');const mark=v&&v.s?' ?':'';const lines=[parts[0],parts.slice(1).join(' ')+mark];
+V.forEach(({p,g:gn,m})=>{const v=lvl(p);const C=v?colr(v):null,fill=C?C[0]:'var(--chip)',ink=C?C[1]:'var(--ink)';
+const c=el('g',{class:'w'},g);const parts=p.name.split(' ');const lines=[parts[0],parts.slice(1).join(' ')];
 if(gn===0){el('circle',{cx:CX,cy:CY,r:R[0][1],style:`fill:${fill}`},c);label(c,CX,CY,0,lines,12,ink,500,years(p))}
 else{const[a0,a1]=span(gn,m),[r0,r1]=R[gn];const d=arc(r0,r1,a0,a1);
 el('path',{d,style:`fill:${fill};stroke:var(--bg);stroke-width:1.5`},c);
-if(v&&v.s)el('path',{d,fill:`url(#${v.s==='ambiguous'?'d':'h'}${PAL[v.c][2]})`,style:'stroke:var(--bg);stroke-width:1.5'},c);
 const mid=(a0+a1)/2,rm=(r0+r1)/2,[x,y]=pt(rm,mid);const rot=gn<=4?((mid>90||mid<-90)?mid+180:mid):(mid>=0?mid-90:mid+90);
 const pr=prob(forkAt(Math.floor(p.n/2)));label(c,x,y,rot,lines,gn<=2?12:11,ink,gn<=3?500:400,[years(p),pr?pc(pr.p):''].filter(Boolean).join(' · '))}
-c.addEventListener('mousemove',e=>show(e,p));c.addEventListener('mouseleave',hide);
-c.addEventListener('click',()=>{if(p.n!==root)go(p.n);else if(root>1)go(Math.floor(root/2))})});
-live.forEach(f=>{const v=V.find(x=>x.p.n===f.n);if(!v)return;const[a0,a1]=v.g?span(v.g,v.m):[0,0],[x,y]=pt(R[v.g][1]+1,a0+(a1-a0)*.12);
-const b=el('g',{class:'sw',role:'button','aria-label':T.switchLabel},g);el('title',{},b).textContent=T.switchTitle(f.who);
-el('circle',{cx:x,cy:y,r:10},b);const t=el('text',{x,y,'text-anchor':'middle','dominant-baseline':'central'},b);t.textContent='⇄';
-b.addEventListener('click',e=>{e.stopPropagation();cycle(f.n)})});
-head();kpis();legend();forks()}
-function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}
+hook(c,p)});
+live.forEach(f=>{const v=V.find(x=>x.p.n===f.n);if(!v)return;const[a0,a1]=v.g?span(v.g,v.m):[0,0],[x,y]=pt(R[v.g][1]+1,a0+(a1-a0)*.12);badge(g,f,x,y)})}
+function fit(text,size,w){return Math.min(size,Math.max(8,(w-10)/(Math.max(text.length,1)*.56)))}
+function renderSq(){const g=document.getElementById('sq');
+const G=Math.max(...V.map(v=>v.g)),cols=G+1,W=Math.min(150,Math.max(100,Math.floor(800/cols))),H=30,HD=22,PAD=14;
+svgBox(W*cols+PAD,HD+(2**G)*H,T.ariaSq);
+const hdr=[T.colRoot,...T.gen.slice(1)];
+for(let c=0;c<cols;c++){const t=el('text',{x:c*W+W/2,y:HD/2,'text-anchor':'middle','dominant-baseline':'central',style:'fill:var(--muted);font-size:11px'},g);t.textContent=hdr[c]}
+V.forEach(({p,g:gn,m})=>{const v=lvl(p);const C=v?colr(v):null,fill=C?C[0]:'var(--chip)',ink=C?C[1]:'var(--ink)';
+const rows=2**(G-gn),x=gn*W,y=HD+(m-2**gn)*rows*H,h=rows*H;
+const c=el('g',{class:'w'},g);const parts=p.name.split(' ');
+el('path',{d:`M${x},${y}h${W}v${h}h${-W}Z`,style:`fill:${fill};stroke:var(--bg);stroke-width:1.5`},c);
+const pr=prob(forkAt(Math.floor(p.n/2)));const sub=[years(p),pr?pc(pr.p):''].filter(Boolean).join(' · ');
+const lines=rows>1||gn===0?[parts[0],parts.slice(1).join(' ')]:[p.name];
+const size=fit(lines.reduce((a,b)=>a.length>b.length?a:b),gn<=2?12:11,W);
+label(c,x+W/2,y+h/2,0,lines,size,ink,gn<=3?500:400,sub);
+hook(c,p)});
+live.forEach(f=>{const v=V.find(x=>x.p.n===f.n);if(!v)return;const rows=2**(G-v.g);badge(g,f,v.g*W+W,HD+(v.m-2**v.g)*rows*H+11)})}
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
 function show(e,p){const t=document.getElementById('tip'),wr=document.getElementById('wrap').getBoundingClientRect();
 const life=[p.b?T.born+' '+dmy(p.b):'',p.d?T.died+' '+dmy(p.d):''].filter(Boolean).join(', ');const lf=life?'<br><span style="color:var(--ink2)">'+life+'</span>':'';
 const hint=t=>'<div style="margin-top:6px;color:var(--accent)">'+t+'</div>';
@@ -127,15 +148,18 @@ function hide(){document.getElementById('tip').style.display='none'}
 let KG=0;
 function kpis(){KG=Math.max(...V.map(v=>v.g));const cnt={3:0,2:0,1:0,0:0};if(KG)V.filter(v=>v.g===KG).forEach(v=>cnt[lvl(v.p).c]++);
 document.getElementById('kpis').innerHTML=KG?[3,2,1].map(k=>`<div class="kp"><b>${cnt[k]}<span style="font-size:12px"> / ${2**KG}</span></b><span>${LV[k]}</span></div>`).join(''):''}
-function legend(){document.getElementById('leg').innerHTML=[3,2,1].map(k=>`<span><span style="width:12px;height:12px;border-radius:2px;background:${PAL[k][0]}"></span>${LV[k]}</span>`).join('')+`<span><svg width="12" height="12"><rect width="12" height="12" rx="2" fill="${PAL[2][0]}"/><rect width="12" height="12" rx="2" fill="url(#h${PAL[2][2]})"/></svg>${esc(T.legDisputed)}</span><span><svg width="12" height="12"><rect width="12" height="12" rx="2" fill="${PAL[2][0]}"/><rect width="12" height="12" rx="2" fill="url(#d${PAL[2][2]})"/></svg>${esc(T.legAmbiguous)}</span>`+(KG?`<span>${esc(T.counters)} — ${T.gen[KG]}</span>`:'')}
+function legend(){const sw=c=>`<span style="width:12px;height:12px;border-radius:2px;background:${c}"></span>`;document.getElementById('leg').innerHTML=[3,2,1].map(k=>`<span>${sw(PAL[k][0])}${LV[k]}</span>`).join('')+['disputed','ambiguous'].map(k=>`<span>${sw(PAL[k][0])}${ST[k]}</span>`).join('')+(KG?`<span>${esc(T.counters)} — ${T.gen[KG]}</span>`:'')}
+function setView(v){view=v;document.getElementById('vFan').classList.toggle('on',v==='fan');document.getElementById('vSq').classList.toggle('on',v==='sq');hide();render();try{hashSave()}catch(e){}}
 function setMode(m){mode=m;document.getElementById('bChain').classList.toggle('on',m==='chain');document.getElementById('bLink').classList.toggle('on',m==='link');render()}
 document.title=TITLE||T.title;
+document.getElementById('vFan').textContent=T.viewFan;
+document.getElementById('vSq').textContent=T.viewSq;
+document.getElementById('views').setAttribute('aria-label',T.viewGroup);
 document.getElementById('bChain').textContent=T.modeChain;
 document.getElementById('bLink').textContent=T.modeLink;
-document.getElementById('svg').setAttribute('aria-label',T.aria);
 document.getElementById('foot').textContent=T.foot;
-try{const h=/#n=(\d+)/.exec(location.hash);if(h)root=+h[1]}catch(e){}
-render();
+try{const h=/n=(\d+)/.exec(location.hash);if(h)root=+h[1];if(/v=sq/.test(location.hash))view='sq'}catch(e){}
+setView(view);
 </script>
 </body>
 </html>

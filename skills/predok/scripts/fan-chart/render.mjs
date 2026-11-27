@@ -3,17 +3,25 @@
 //
 //   node render.mjs <data.json> [out.html] [--lang uk|en] [--show 5] [--title "…"] [--date YYYY-MM-DD]
 //
-// data.json: { "rows": Row[], "forks": Fork[] }  (`forks` may be omitted)
-//   Row  = { n, name, b?, d?, l?, s?, t?, alt?, skip? }
+// The page has two views, a fan and a square (generations in columns), switched above the chart and kept in the address
+// (`#v=sq`, with the centre `#n=`). The default output is `confidence-<root without "person-">.html` when the data has
+// `root`, so reports for different persons do not overwrite each other; else `confidence-fan.html`.
+//
+// data.json: { "root"?: string, "rows": Row[], "forks": Fork[] }  (`forks` may be omitted)
+//   Row  = { n, name, b?, d?, l?, s?, t?, alt?, skip?, fk? }
 //     n     sector number by Sosa–Stradonitz: 1 is the root, 2n the father of n, 2n+1 the mother (always counted from the root)
 //     name  short name; b / d  dates ("1836-04-02", "ABT 1836", "BET 1867 AND 1868")
 //     l     level of the link to the child: 3 confirmed, 2 probable, 1 conjecture, 0 no assertion (the root has none)
 //     s     state of the link: "disputed" | "ambiguous"
 //     t     short note on what the link rests on; alt  line about other candidates
 //     skip  sector number of an ambiguous link that this common ancestor goes around
-//   Fork = { n, who, labels: string[], probs: ({p, lo, hi, date} | null)[], alts: Row[][] }
-//     n     sector of the child whose parents are uncertain; labels[0] is the main version, labels[i] the i-th alternative
-//     alts  for each alternative the rows that replace everything above the child
+//     fk    1 when the state is doubt about who the person is (a fork on her): ancestors with `skip` (common to all her
+//           candidates) do not inherit it
+//   Fork = { n, who, labels: string[], probs: ({p, lo, hi, date} | null)[], own?: ({b?, d?})[], alts: Row[][] }
+//     n     sector of the person in doubt (which "who" is meant); labels[0] is the main version, labels[i] the i-th alternative
+//     own   for each option the candidate's own dates, which replace the dates of sector n while it is chosen;
+//           the button of an option starts with the candidate's birth year
+//     alts  for each alternative the rows that replace everything above the person
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -47,14 +55,15 @@ function main() {
   const show = Number(opt("show", "5"));
   const title = opt("title", "");
   const date = opt("date", undefined);
-  const [input, output = "confidence-fan.html"] = args;
+  const [input, given] = args;
   if (!input) {
     console.error("Usage: node render.mjs <data.json> [out.html] [--lang uk|en] [--show 5] [--title …] [--date YYYY-MM-DD]");
     process.exit(2);
   }
   const data = JSON.parse(readFileSync(resolve(input), "utf8"));
   if (!Array.isArray(data.rows) || !data.rows.some((r) => r.n === 1)) throw new Error('data.rows must hold the root, sector n = 1');
-  const out = resolve(output);
+  const fallback = typeof data.root === "string" ? `confidence-${data.root.replace(/^person-/, "")}.html` : "confidence-fan.html";
+  const out = resolve(given ?? fallback);
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, renderPage(data, { lang, show, title, ...(date ? { date } : {}) }));
   console.log(`${data.rows.length} rows, ${(data.forks ?? []).length} forks -> ${out}`);

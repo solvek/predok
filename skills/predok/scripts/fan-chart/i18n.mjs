@@ -6,13 +6,16 @@ export const chart = {
   uk: {
     title: "Достовірність родоводу",
     aria: "Віялова діаграма достовірності гілок родоводу",
+    ariaSq: "Квадратна діаграма достовірності гілок родоводу",
+    viewGroup: "Вигляд діаграми",
+    viewFan: "Віяло",
+    viewSq: "Квадрат",
+    colRoot: "Центр",
     modeChain: "Ланцюг до центру",
     modeLink: "Окремий зв'язок",
     gen: ["", "батьки", "діди", "прадіди", "прапрадіди", "3× прадіди"],
     levels: { 3: "підтверджено", 2: "ймовірно", 1: "припущення", 0: "немає твердження" },
     states: { disputed: "суперечність", ambiguous: "неоднозначність" },
-    legDisputed: "суперечність (?)",
-    legAmbiguous: "неоднозначність (?)",
     counters: "лічильники",
     about: "бл.",
     born: "нар.",
@@ -31,19 +34,26 @@ export const chart = {
     clickCentre: "Клік — зробити центром діаграми",
     switchLabel: "Перемкнути кандидата",
     foot:
+      "Вигляд перемикається: віяло або квадрат (покоління колонками зліва направо). " +
       "Клік по людині робить її центром діаграми; клік по центру — на покоління вниз; кнопка «⌂» повертає до основної особи. " +
       "Роки життя — з подій народження й смерті; «~» — приблизний рік, без років — даних немає. " +
-      "Рівні: підтверджено (два незалежні документи), ймовірно, припущення. Штрихування — суперечність записів; " +
-      "крапки — неоднозначність (кілька кандидатів): кандидатів перемикає значок ⇄ на розвилці або кнопки над діаграмою. " +
+      "Рівні: підтверджено (два незалежні документи), ймовірно, припущення. Оранжевий — суперечність записів; " +
+      "жовтий — неоднозначність (кілька кандидатів); колір стану замінює колір рівня, рівень тоді видно в підказці. " +
+      "Кандидатів перемикає значок ⇄ на розвилці або кнопки над діаграмою. " +
       "Відсотки — імовірність версії за зваженими аргументами; це суб'єктивна оцінка з широким діапазоном, не доказ.",
     fn: {
-      forkOf: (who) => `Розвилка — батьки особи «${who}»:`,
+      forkOf: (who) => `Розвилка — яка саме «${who}»:`,
       sub: (date, name, gens, f, m) =>
         `Стан на ${date}. Центр — ${name}` +
         (gens
           ? `; назовні — ${gens}. Ліва половина — лінія батька${f ? " (" + f + ")" : ""}, права — лінія матері${m ? " (" + m + ")" : ""}.`
           : "; предків у дереві немає."),
-      switchTitle: (who) => `Перемкнути кандидата: батьки особи «${who}»`,
+      subSq: (date, name, gens, f, m) =>
+        `Стан на ${date}. Центр — ${name}` +
+        (gens
+          ? `; праворуч — ${gens}. Верхня половина — лінія батька${f ? " (" + f + ")" : ""}, нижня — лінія матері${m ? " (" + m + ")" : ""}.`
+          : "; предків у дереві немає."),
+      switchTitle: (who) => `Перемкнути кандидата: яка саме «${who}» (з іншими батьками й датами)`,
       clickDown: (name) => `Клік — на покоління вниз (${name})`,
       weakest: (name) => `${name} → батьки`,
       chainTo: (name) => `Ланцюг до центру (${name})`,
@@ -52,13 +62,16 @@ export const chart = {
   en: {
     title: "Confidence of the family tree",
     aria: "Fan chart of the confidence of the branches of the family tree",
+    ariaSq: "Square chart of the confidence of the branches of the family tree",
+    viewGroup: "Chart view",
+    viewFan: "Fan",
+    viewSq: "Square",
+    colRoot: "Centre",
     modeChain: "Chain to the centre",
     modeLink: "Single link",
     gen: ["", "parents", "grandparents", "great-grandparents", "2× great-grandparents", "3× great-grandparents"],
     levels: { 3: "confirmed", 2: "probable", 1: "conjecture", 0: "no assertion" },
     states: { disputed: "conflict", ambiguous: "ambiguity" },
-    legDisputed: "conflict (?)",
-    legAmbiguous: "ambiguity (?)",
     counters: "counters",
     about: "abt",
     born: "b.",
@@ -77,19 +90,26 @@ export const chart = {
     clickCentre: "Click to make this person the centre",
     switchLabel: "Switch the candidate",
     foot:
+      "Switch the view: a fan or a square (generations in columns from left to right). " +
       "Click a person to make them the centre; click the centre to go one generation down; the “⌂” button returns to the main person. " +
       "Life years come from birth and death events; “~” is an approximate year, no years means no data. " +
-      "Levels: confirmed (two independent documents), probable, conjecture. Hatching marks a conflict between records; " +
-      "dots mark an ambiguity (several candidates): switch the candidates with the ⇄ mark on the fork or with the buttons above the chart. " +
+      "Levels: confirmed (two independent documents), probable, conjecture. Orange marks a conflict between records; " +
+      "yellow an ambiguity (several candidates); the colour of a state replaces the colour of the level, which the tooltip then shows. " +
+      "Switch the candidates with the ⇄ mark on the fork or with the buttons above the chart. " +
       "Percentages are the probability of a version from the weighed arguments; a subjective estimate with a wide range, not proof.",
     fn: {
-      forkOf: (who) => `Fork — parents of “${who}”:`,
+      forkOf: (who) => `Fork — which “${who}”:`,
       sub: (date, name, gens, f, m) =>
         `As of ${date}. Centre — ${name}` +
         (gens
           ? `; outwards — ${gens}. The left half is the father's line${f ? " (" + f + ")" : ""}, the right half the mother's${m ? " (" + m + ")" : ""}.`
           : "; the tree has no ancestors for this person."),
-      switchTitle: (who) => `Switch the candidate: parents of “${who}”`,
+      subSq: (date, name, gens, f, m) =>
+        `As of ${date}. Centre — ${name}` +
+        (gens
+          ? `; to the right — ${gens}. The upper half is the father's line${f ? " (" + f + ")" : ""}, the lower half the mother's${m ? " (" + m + ")" : ""}.`
+          : "; the tree has no ancestors for this person."),
+      switchTitle: (who) => `Switch the candidate: which “${who}” (with other parents and dates)`,
       clickDown: (name) => `Click to go one generation down (${name})`,
       weakest: (name) => `${name} → parents`,
       chainTo: (name) => `Chain to the centre (${name})`,
@@ -101,6 +121,7 @@ export const build = {
   uk: {
     noAssertion: "Немає твердження",
     alt: "Альтернатива: ",
+    doubtful: "Особа під сумнівом: є кілька кандидатів (розвилка на цій особі). ",
     shared: (label, note) =>
       `Спільний предок показаної й альтернативної гілки (${label}), тож неоднозначність його не стосується; рівень — слабший із двох шляхів. ${note}`,
     summary: (rows, forks, out) => `${rows} осіб, розвилок: ${forks} -> ${out}`,
@@ -108,6 +129,7 @@ export const build = {
   en: {
     noAssertion: "No assertion",
     alt: "Alternative: ",
+    doubtful: "The person is in doubt: there are several candidates (a fork on this person). ",
     shared: (label, note) =>
       `Common ancestor of the shown and the alternative branch (${label}), so the ambiguity does not apply to them; the level is the weaker of the two paths. ${note}`,
     summary: (rows, forks, out) => `${rows} persons, forks: ${forks} -> ${out}`,

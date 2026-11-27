@@ -4,7 +4,8 @@
 //
 //   node from-glx.mjs <tree_dir> --root <person-id> [--depth 10] [--hypotheses <dir>] [--lang uk|en] [--out data.json]
 //
-// Prints the JSON that render.mjs takes (to --out, or to stdout). Conventions of the research folder:
+// Prints the JSON that render.mjs takes (to --out, or to stdout); it carries the root id, so render.mjs names the page
+// after the root person (`confidence-<id without "person-">.html`) and reports for different persons do not collide. Conventions of the research folder:
 //  - Every parent link is a `biological_parent_child` relationship with one or more assertions on its `type`
 //    property. The level is the assertion's `confidence` (high 3, medium 2, low 1); the state is its `status`.
 //    An assertion whose id contains "father" / "mother" applies to that parent only, any other to both;
@@ -15,6 +16,11 @@
 //  - Chain confidence is the weakest link on the way to the root (computed by the page). Ancestors common to the
 //    shown and the other candidates skip the ambiguous link and take the weaker of the two paths.
 //  - Birth and death dates come from `birth` / `death` events where the person is the `principal`.
+//  - The fork is on the person whose identity is in doubt, not only on her parents: a candidate has her own parents
+//    and may have her own birth date. An assertion whose id ends with "-alt" on the `date` property of a birth / death
+//    event of that person gives her alternative date; it belongs to her first alternative (`own` of the fork) and
+//    replaces her dates while that alternative is chosen. The person with a fork is marked `ambiguous` with `fk`:
+//    the doubt about who she is does not pass on to ancestors common to all her candidates.
 //  - Probabilities come from <hypotheses>/*.yaml (the format of weigh.mjs): prior odds times the likelihood
 //    ratios, and the range with every ratio at its low / high bound. A hypothesis is tied to a fork option
 //    through its assertion's relationship. Exactly two hypotheses per file.
@@ -68,6 +74,18 @@ export function collect({ parse, tree, hypotheses = [], root, depth = 10, lang =
       if (e.type === "birth") rec.b = String(e.date);
       else rec.d = String(e.date);
       life.set(x.person, rec);
+    }
+  }
+  /** Alternative birth / death dates of a person (assertions "*-alt" on `date`), used while her first alternative is chosen. */
+  const altLife = new Map();
+  for (const [aid, a] of Object.entries(A)) {
+    const ev = E[a.subject?.event];
+    if (!aid.endsWith("-alt") || a.property !== "date" || !ev || (ev.type !== "birth" && ev.type !== "death")) continue;
+    for (const x of ev.participants ?? []) {
+      if (x.role !== "principal") continue;
+      const rec = altLife.get(x.person) ?? {};
+      rec[ev.type === "birth" ? "b" : "d"] = String(a.value);
+      altLife.set(x.person, rec);
     }
   }
   const short = (p) => {
@@ -152,6 +170,11 @@ export function collect({ parse, tree, hypotheses = [], root, depth = 10, lang =
       const k = 2 * n + (link.sex === "male" ? 0 : 1);
       const row = { ...person(link.parent, k), l: link.level, s: link.status, t: link.note };
       let subShared = shared;
+      if (options(link.parent).length > 1 && !row.s) {
+        row.s = "ambiguous";
+        row.fk = 1;
+        row.t = S.doubtful + row.t;
+      }
       if (others.length) {
         const label = others.map(pair).join("; ");
         row.alt = S.alt + label;
@@ -182,9 +205,10 @@ export function collect({ parse, tree, hypotheses = [], root, depth = 10, lang =
       walk(child, n, shared, altRows, { child, i: j + 1 });
       return altRows;
     });
-    return { n, who: short(child), labels: opts.map(pair), probs: opts.map(prob), alts };
+    const own = opts.map((_, j) => (j === 1 ? (altLife.get(child) ?? {}) : {}));
+    return { n, who: short(child), labels: opts.map(pair), probs: opts.map(prob), own, alts };
   });
-  return { rows, forks };
+  return { root, rows, forks };
 }
 
 const readDir = (dir, ext) => (existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith(ext)).sort().map((f) => readFileSync(join(dir, f), "utf8")) : []);

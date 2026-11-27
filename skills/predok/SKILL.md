@@ -84,12 +84,20 @@ chart"; fetch it before the first chart.
 
 - **When to offer it.** Once the tree has three or more generations with
   confidence levels set, and before the summary of a stage of work, offer the
-  user the chart. Keep one file (for example `reports/confidence-fan.html`)
-  and overwrite it each time; do not make dated copies: earlier states stay in
-  version history.
+  user the chart. Keep one file per root person, named after it
+  (`reports/confidence-<root id without "person-">.html`, which `render.mjs`
+  uses by default), and overwrite it each time; do not make dated copies:
+  earlier states stay in version history. The page has two views, a fan and a
+  square (generations in columns), which reads better from the fifth
+  generation on and for long names.
 - **Candidates are separate links.** When several candidates fit and no
   document decides, write each as its own parent link with its own level, not
-  only as a note on the main one, so the chart can show both versions. Research
+  only as a note on the main one, so the chart can show both versions. The
+  fork is on the person, not only on her parents: the question is "which
+  Maria", and each candidate has her own parents and her own birth date. When
+  the candidates' dates differ, write the date of the alternative as its own
+  `-alt` assertion on the `date` of her birth event, so the chart shows the
+  date of the chosen candidate. Research
   the ancestors of the alternative candidate at least one generation up: that is
   where common ancestors and checkable differences are found. A candidate who is
   a relative shares ancestors with the main one; they are not ambiguous.
@@ -106,7 +114,7 @@ for the first one):
 
 | Script | What it does |
 |--------|--------------|
-| `render.mjs <data.json> [out.html] [--lang uk\|en] [--show 5] [--title …]` | Page from chart data; no dependencies. The format of `data.json` is in the header of the script. Use it for any source. |
+| `render.mjs <data.json> [out.html] [--lang uk\|en] [--show 5] [--title …]` | Page from chart data; no dependencies. The format of `data.json` is in the header of the script. Use it for any source. Without `out.html` the page is named after `root` of the data. |
 | `from-glx.mjs <tree_dir> --root <person-id> [--depth 10] [--hypotheses <dir>] [--lang uk\|en] [--out data.json]` | Chart data from a GLX archive. Needs the `yaml` package: run `npm install yaml` in the research folder. The conventions it reads (`-alt` relationships, `father` / `mother` in assertion ids, hypothesis files) are in the header of the script and in `https://predok.ai/w/tools/glx.md`. |
 | `weigh.mjs <hypotheses/name.yaml> [--lang uk\|en]` | Weighing of two hypotheses: ACH table, odds, range; writes `name.report.md`. Needs `yaml`. |
 
@@ -115,7 +123,7 @@ find it with the path of this file):
 
 ```
 node <skill>/scripts/fan-chart/from-glx.mjs tree --root person-x --out /tmp/fan.json
-node <skill>/scripts/fan-chart/render.mjs /tmp/fan.json reports/confidence-fan.html --lang en
+node <skill>/scripts/fan-chart/render.mjs /tmp/fan.json reports/confidence-x.html --lang en
 ```
 
 The page is a single HTML file: tell the user where it is and how to open it.
